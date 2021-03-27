@@ -1,0 +1,9 @@
+body {
+    background-color:lightblue;
+    min-height: 1000px;
+}
+
+.container {
+    margin: 15px;
+    margin-top: 30px;
+}
