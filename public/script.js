@@ -1,3 +1,10 @@
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+}
+ const test = getRandomIntInclusive(0,46);
+ console.log(test)
 const databody = document.querySelector('.body');
 const datahead = document.querySelector('.header');
 
@@ -9,7 +16,6 @@ async function windowActions() {
   const json = await request.json();
   const json2 = await request2.json();
 
-
   const keys = Object.keys(json[0]); // keys of meals array
   const keymeals = keys.slice(0, 2); // only grab the first two keys (into an array)
   const keys2 = Object.keys(json2[0]); // keys of macros array
@@ -17,7 +23,6 @@ async function windowActions() {
   keymacros.push(keys2[8]); // push the last key into the macros key array
   const headerkeys = keymeals.concat(keymacros); // concat the selected keys together into one array
   let name;
-
 
   let key_html = headerkeys.map(key => {
     if (key.includes("_")) { // if the key has an underscore
@@ -37,25 +42,26 @@ async function windowActions() {
   datahead.innerHTML = key_html;
 
 
-  
-    for (let i = 0; i < json.length; i++) { // for each iteration based on the meal length
+    const mealIndex = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const selection = mealIndex.map((element) => {
+      const random = getRandomIntInclusive(0, json.length - 1);
       lineitem = document.createElement('tr'); // create a new row for each iteration
+      console.log()
       const html = `
-        <th class = "id">${json[i].meal_id}</th>
-        <td class = "name">${json[i].meal_name}</td>
-        <td class = "calories">${json2[i].calories}</td>
-        <td class = "serving">${json2[i].serving_size}</td>
-        <td class = "cholesterol">${json2[i].cholesterol}</td>
-        <td class = "sodium">${json2[i].sodium}</td>
-        <td class = "carbs">${json2[i].carbs}</td>
-        <td class = "protein">${json2[i].protein}</td>
-        <td class = "fat">${json2[i].fat}</td>
+        <th class = "id">${json[random].meal_id}</th>
+        <td class = "name">${json[random].meal_name}</td>
+        <td class = "calories">${json2[random].calories}</td>
+        <td class = "serving">${json2[random].serving_size}</td>
+        <td class = "cholesterol">${json2[random].cholesterol}</td>
+        <td class = "sodium">${json2[random].sodium}</td>
+        <td class = "carbs">${json2[random].carbs}</td>
+        <td class = "protein">${json2[random].protein}</td>
+        <td class = "fat">${json2[random].fat}</td>
         `;
       console.log(html)
       lineitem.innerHTML = html; // add html to the newly made row tag
       databody.append(lineitem); // add the row tag w html into the body
-    };
-
+   });
 
 
   /*const html = data.map(hall => { //.map creates an array with equal size but replaces the values with this
