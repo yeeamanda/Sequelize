@@ -8,58 +8,38 @@ async function windowActions() {
   const request2 = await fetch(endpoint2)
   const json = await request.json();
   const json2 = await request2.json();
-  // const data = json["data"];
 
-  keys = Object.keys(json[0]);
-  keymeals = keys.slice(0, 2);
-  console.log(keymeals)
-  keys2 = Object.keys(json2[0]);
-  keymacros = keys2.slice(1, 7);
-  keymacros.push(keys2[8])
-  console.log(keymacros)
-  headerkeys = keymeals.concat(keymacros);
-  console.log(headerkeys)
+
+  const keys = Object.keys(json[0]); // keys of meals array
+  const keymeals = keys.slice(0, 2); // only grab the first two keys (into an array)
+  const keys2 = Object.keys(json2[0]); // keys of macros array
+  const keymacros = keys2.slice(1, 7); // only grab the keys 2-6 (into an array)
+  keymacros.push(keys2[8]); // push the last key into the macros key array
+  const headerkeys = keymeals.concat(keymacros); // concat the selected keys together into one array
   let name;
+
+
   let key_html = headerkeys.map(key => {
-    if (key.includes("_")) {
-      const head = key.split("_");
-      for (i = 0; i < 2; i++) { 
-        head[i] = head[i].charAt(0).toUpperCase() + head[i].slice(1);
-        name = head.join(" ");
-        console.log(name)
+    if (key.includes("_")) { // if the key has an underscore
+      const head = key.split("_"); // split it by the underscore, result is a list w each side
+      for (i = 0; i < 2; i++) {  // for i = 0 and 1
+        head[i] = head[i].charAt(0).toUpperCase() + head[i].slice(1); // uppercase each word
+        name = head.join(" "); // join the words togehter (head = [Meal, Id])
       }
     } else {
-      name = key.charAt(0).toUpperCase() + key.slice(1);
+      name = key.charAt(0).toUpperCase() + key.slice(1); // else, uppercase the word
     }
     return `
-      <td>${name}</td>
-    `;
-  }).join('');
+      <td>${name}</td> 
+    `; // return the name in a td tag
+  }).join(''); // convert it all to a string (from an array, result of map method)
+
   datahead.innerHTML = key_html;
 
-  /*keys = Object.keys(json[0]);
-  keys2 = Object.keys(json2[0]);
-  console.log(keys)
-    for (let i = 0; i < 2; i++) {
-      let name = keys[i].split("_")[1];
-      console.log(name)
-      name = name.charAt(0).toUpperCase() + name.slice(1);
-    }
-    for (let i = 1; i<)
 
-
-
-      const keys_html = `
-        <td>${name}</td>
-      `;
-      datahead.innerHTML = keys_html;
-      console.log(keys_html)
-    };*/
-
-  const rows = [json, json2];
-  rows.forEach(() => {
-    for (let i = 0; i < json.length; i++) {
-      lineitem = document.createElement('tr');
+  
+    for (let i = 0; i < json.length; i++) { // for each iteration based on the meal length
+      lineitem = document.createElement('tr'); // create a new row for each iteration
       const html = `
         <th class = "id">${json[i].meal_id}</th>
         <td class = "name">${json[i].meal_name}</td>
@@ -72,10 +52,9 @@ async function windowActions() {
         <td class = "fat">${json2[i].fat}</td>
         `;
       console.log(html)
-      lineitem.innerHTML = html;
-      databody.append(lineitem);
-    }
-  });
+      lineitem.innerHTML = html; // add html to the newly made row tag
+      databody.append(lineitem); // add the row tag w html into the body
+    };
 
 
 
