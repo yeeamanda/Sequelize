@@ -6,3 +6,11 @@ body {
 .container {
     margin-left: 15px;
 }
+
+#chart {
+    margin-bottom: 150px;
+}
+
+.table {
+    width: 100%;
+}
