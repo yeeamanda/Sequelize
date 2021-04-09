@@ -41,12 +41,12 @@ async function windowActions() {
 
   datahead.innerHTML = key_html;
 
-
+  let indexList = [];
     const mealIndex = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const selection = mealIndex.map((element) => {
       const random = getRandomIntInclusive(0, json.length - 1);
+      indexList.push(random);
       lineitem = document.createElement('tr'); // create a new row for each iteration
-      console.log()
       const html = `
         <th class = "id">${json[random].meal_id}</th>
         <td class = "name">${json[random].meal_name}</td>
@@ -62,7 +62,24 @@ async function windowActions() {
       lineitem.innerHTML = html; // add html to the newly made row tag
       databody.append(lineitem); // add the row tag w html into the body
    });
+   
+   let CalorieData = [];
+   let CholData = [];
+   let SodiumData = [];
+   let CarbData = [];
+   let ProteinData = [];
+   let FatData = [];
+   
+   const macroItems = indexList.reverse().map(i => {
+    CalorieData.push({label: json[i].meal_name, y: json2[i].calories});
+    CholData.push({label: json[i].meal_name, y: json2[i].cholesterol});
+    SodiumData.push({label: json[i].meal_name, y: json2[i].sodium}); 
+    CarbData.push({label: json[i].meal_name, y: json2[i].carbs});
+    ProteinData.push({label: json[i].meal_name, y: json2[i].protein});
+    FatData.push({label: json[i].meal_name, y: json2[i].fat});
+   });
 
+  console.log(CalorieData)
    let newchart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
     title:{
@@ -70,9 +87,6 @@ async function windowActions() {
     },
     axisX: {
       valueFormatString: "DDD"
-    },
-    axisY: {
-      prefix: "$"
     },
     toolTip: {
       shared: true
@@ -83,85 +97,42 @@ async function windowActions() {
     },
     data: [{
       type: "stackedBar",
-      name: "Meals",
+      name: "Calories",
       showInLegend: "true",
-      xValueFormatString: "DD, MMM",
-      yValueFormatString: "$#,##0",
-      dataPoints: [
-        { x: new Date(2017, 0, 30), y: 56 },
-        { x: new Date(2017, 0, 31), y: 45 },
-        { x: new Date(2017, 1, 1), y: 71 },
-        { x: new Date(2017, 1, 2), y: 41 },
-        { x: new Date(2017, 1, 3), y: 60 },
-        { x: new Date(2017, 1, 4), y: 75 },
-        { x: new Date(2017, 1, 5), y: 98 }
-      ]
+      dataPoints: CalorieData
     },
     {
       type: "stackedBar",
-      name: "Snacks",
+      name: "Cholesterol",
       showInLegend: "true",
-      xValueFormatString: "DD, MMM",
-      yValueFormatString: "$#,##0",
-      dataPoints: [
-        { x: new Date(2017, 0, 30), y: 86 },
-        { x: new Date(2017, 0, 31), y: 95 },
-        { x: new Date(2017, 1, 1), y: 71 },
-        { x: new Date(2017, 1, 2), y: 58 },
-        { x: new Date(2017, 1, 3), y: 60 },
-        { x: new Date(2017, 1, 4), y: 65 },
-        { x: new Date(2017, 1, 5), y: 89 }
-      ]
+      dataPoints: CholData
     },
     {
       type: "stackedBar",
-      name: "Drinks",
+      name: "Sodium",
       showInLegend: "true",
-      xValueFormatString: "DD, MMM",
-      yValueFormatString: "$#,##0",
-      dataPoints: [
-        { x: new Date(2017, 0, 30), y: 48 },
-        { x: new Date(2017, 0, 31), y: 45 },
-        { x: new Date(2017, 1, 1), y: 41 },
-        { x: new Date(2017, 1, 2), y: 55 },
-        { x: new Date(2017, 1, 3), y: 80 },
-        { x: new Date(2017, 1, 4), y: 85 },
-        { x: new Date(2017, 1, 5), y: 83 }
-      ]
+      dataPoints: SodiumData
     },
     {
       type: "stackedBar",
-      name: "Dessert",
+      name: "Carbs",
       showInLegend: "true",
-      xValueFormatString: "DD, MMM",
-      yValueFormatString: "$#,##0",
-      dataPoints: [
-        { x: new Date(2017, 0, 30), y: 61 },
-        { x: new Date(2017, 0, 31), y: 55 },
-        { x: new Date(2017, 1, 1), y: 61 },
-        { x: new Date(2017, 1, 2), y: 75 },
-        { x: new Date(2017, 1, 3), y: 80 },
-        { x: new Date(2017, 1, 4), y: 85 },
-        { x: new Date(2017, 1, 5), y: 105 }
-      ]
+      dataPoints: CarbData
     },
     {
       type: "stackedBar",
-      name: "Takeaway",
+      name: "Protein",
       showInLegend: "true",
-      xValueFormatString: "DD, MMM",
-      yValueFormatString: "$#,##0",
-      dataPoints: [
-        { x: new Date(2017, 0, 30), y: 52 },
-        { x: new Date(2017, 0, 31), y: 55 },
-        { x: new Date(2017, 1, 1), y: 20 },
-        { x: new Date(2017, 1, 2), y: 35 },
-        { x: new Date(2017, 1, 3), y: 30 },
-        { x: new Date(2017, 1, 4), y: 45 },
-        { x: new Date(2017, 1, 5), y: 25 }
-      ]
-    }]
-  });
+      dataPoints: ProteinData
+    },
+    {
+    type: "stackedBar",
+    name: "Fat",
+    showInLegend: "true",
+    dataPoints: FatData
+
+  }]
+});
   newchart.render();
   
   function toggleDataSeries(e) {
