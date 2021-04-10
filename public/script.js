@@ -1,18 +1,16 @@
 function getRandomIntInclusive(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
- const test = getRandomIntInclusive(0,46);
- console.log(test)
 const databody = document.querySelector('.body');
 const datahead = document.querySelector('.header');
 
-async function windowActions() { 
+async function windowActions() {
   const endpoint1 = '/api/meals';
   const endpoint2 = '/api/macros';
   const request = await fetch(endpoint1);
-  const request2 = await fetch(endpoint2)
+  const request2 = await fetch(endpoint2);
   const json = await request.json();
   const json2 = await request2.json();
 
@@ -36,12 +34,12 @@ async function windowActions() {
     }
     return `
       <td>${name}</td> 
-    `; // return the name in a td tag
+    `; 
   }).join(''); // convert it all to a string (from an array, result of map method)
 
   datahead.innerHTML = key_html;
 
-  let indexList = [];
+  const indexList = [];
     const mealIndex = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const selection = mealIndex.map((element) => {
       const random = getRandomIntInclusive(0, json.length - 1);
@@ -58,35 +56,37 @@ async function windowActions() {
         <td class = "protein">${json2[random].protein}</td>
         <td class = "fat">${json2[random].fat}</td>
         `;
-      console.log(html)
       lineitem.innerHTML = html; // add html to the newly made row tag
       databody.append(lineitem); // add the row tag w html into the body
    });
    
-   let CalorieData = [];
-   let CholData = [];
-   let SodiumData = [];
-   let CarbData = [];
-   let ProteinData = [];
-   let FatData = [];
+
+   // Beginning of chart information
+  let CalorieData = [];
+  let CholData = [];
+  let SodiumData = [];
+  let CarbData = [];
+  let ProteinData = [];
+  let FatData = [];
    
-   const macroItems = indexList.reverse().map(i => {
+  const macroItems = indexList.reverse().map(i => {
     CalorieData.push({label: json[i].meal_name, y: json2[i].calories});
     CholData.push({label: json[i].meal_name, y: json2[i].cholesterol});
     SodiumData.push({label: json[i].meal_name, y: json2[i].sodium}); 
     CarbData.push({label: json[i].meal_name, y: json2[i].carbs});
     ProteinData.push({label: json[i].meal_name, y: json2[i].protein});
     FatData.push({label: json[i].meal_name, y: json2[i].fat});
-   });
+  });
 
-  console.log(CalorieData)
-   let newchart = new CanvasJS.Chart("chartContainer", {
+
+  let newchart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
     title:{
       text: "Meal Information"
     },
     axisX: {
-      valueFormatString: "DDD"
+      valueFormatString: "DDD",
+      labelAutoFit: true
     },
     toolTip: {
       shared: true
@@ -126,15 +126,15 @@ async function windowActions() {
       dataPoints: ProteinData
     },
     {
-    type: "stackedBar",
-    name: "Fat",
-    showInLegend: "true",
-    dataPoints: FatData
+      type: "stackedBar",
+      name: "Fat",
+      showInLegend: "true",
+      dataPoints: FatData
 
-  }]
-});
+    }]
+  });
   newchart.render();
-  
+
   function toggleDataSeries(e) {
     if(typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
       e.dataSeries.visible = false;
@@ -144,7 +144,6 @@ async function windowActions() {
     }
     newchart.render();
   }
-  
-  }
+}
 
 window.onload = windowActions;
