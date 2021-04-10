@@ -86,7 +86,11 @@ async function windowActions() {
     },
     axisX: {
       valueFormatString: "DDD",
-      labelAutoFit: true
+      labelAutoFit: true,
+      labelFontSize: 15
+    },
+    axisY: {
+      labelFontSize: 15
     },
     toolTip: {
       shared: true
